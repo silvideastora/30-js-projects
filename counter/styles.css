@@ -1,0 +1,8 @@
+.contenedor {
+  display: flex;
+  flex-direction: column;
+}
+span {
+  font-size: 4rem;
+  text-align: center;
+}
