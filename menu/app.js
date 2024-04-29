@@ -75,7 +75,7 @@ const menu = [
   {
     id: 10,
     title: "Rib eye Menier",
-    category: "comida",
+    category: "cena",
     price: 395.99,
     img:"img/item-10.jpeg",
     description: `Suave corte de rib eye con reduccion de salsa menier y verduras`
@@ -84,11 +84,89 @@ const menu = [
 ]
 
 const sectionCenter = document.querySelector(".section-center")
-const filterBtns = document.querySelectorAll(".filters")
+const containerBtns = document.querySelector(".btn-container")
+
+
 
 window.addEventListener("DOMContentLoaded", function(){
   displayMenuItems(menu)
+  displayFilterBtns()
 })
+
+function displayFilterBtns() { 
+  const categories = menu.reduce((values, item) => {
+    if (!values.includes(item.category)) {
+      values.push(item.category);
+    }
+    return values; // Retorna el acumulador sin hacer console.log
+  }, ["todo"]);
+
+  const categoryBtns = categories.map(category => {
+    return `<button class="btn btn-primary filters" type="button" data-id=${category}>${category}</button>`;
+  })
+  .join("");
+  
+  containerBtns.innerHTML = categoryBtns
+  const filterBtns = document.querySelectorAll(".filters")
+
+  filterBtns.forEach(function (btn) {
+    btn.addEventListener("click", function (e) {
+      // console.log(e.currentTarget.dataset);
+      const category = e.currentTarget.dataset.id;
+      const menuCategory = menu.filter(function (menuItem) {
+        // console.log(menuItem.category);
+        if (menuItem.category === category) {
+          return menuItem;
+        }
+      });
+      if (category === "todo") {
+        displayMenuItems(menu);
+      } else {
+        displayMenuItems(menuCategory);
+      }
+    });
+  });
+  
+}
+/* const categories = menu.reduce(
+    function (values, item) {
+      if (!values.includes(item.category)) {
+        values.push(item.category);
+      }
+      return values;
+    },
+    ["all"]
+  );
+  const categoryBtns = categories
+    .map(function (category) {
+      return `<button type="button" class="filter-btn" data-id=${category}>
+          ${category}
+        </button>`;
+    })
+    .join("");
+
+  btnContainer.innerHTML = categoryBtns;
+  const filterBtns = btnContainer.querySelectorAll(".filter-btn");
+  console.log(filterBtns);
+
+  filterBtns.forEach(function (btn) {
+    btn.addEventListener("click", function (e) {
+      // console.log(e.currentTarget.dataset);
+      const category = e.currentTarget.dataset.id;
+      const menuCategory = menu.filter(function (menuItem) {
+        // console.log(menuItem.category);
+        if (menuItem.category === category) {
+          return menuItem;
+        }
+      });
+      if (category === "all") {
+        diplayMenuItems(menu);
+      } else {
+        diplayMenuItems(menuCategory);
+      }
+    });
+  });
+*/
 
 function displayMenuItems(menuItems){
   let displayMenu = menuItems.map(item => {
@@ -110,22 +188,3 @@ function displayMenuItems(menuItems){
   sectionCenter.innerHTML = displayMenu
 }
 
-filterBtns.forEach((btn) => {
-  btn.addEventListener("click", function(e){
-
-    const category = e.currentTarget.dataset.id
-    const menuCategory = menu.filter((menuItem) => {
-
-      if(menuItem.category === category){
-        return menuItem
-      }
-      
-    })
-    if(category === "todo"){
-      return displayMenuItems(menu)
-    } else {
-      displayMenuItems(menuCategory)
-    }
-  })
-
-})
